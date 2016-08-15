@@ -19,6 +19,9 @@
 
 using System;
 using System.Collections.Generic;
+#if NET_CORE
+using System.Reflection;
+#endif
 using System.Threading;
 using Thrift.Collections;
 using Thrift.Protocol;
@@ -137,7 +140,9 @@ namespace Test
 
                         //ensure proper open/close of transport
                         trans.Open();
+#if !NET_CORE
                         trans.Close();
+#endif
                         t.Start(trans);
                     }
                     else
@@ -283,7 +288,11 @@ namespace Test
             }
 
             // binary equals? only with hashcode option enabled ...
-            if( typeof(CrazyNesting).GetMethod("Equals").DeclaringType == typeof(CrazyNesting)) 
+#if NET_CORE
+            if( typeof(CrazyNesting).GetTypeInfo().GetMethod("Equals").DeclaringType == typeof(CrazyNesting))
+#else
+            if (typeof(CrazyNesting).GetMethod("Equals").DeclaringType == typeof(CrazyNesting))
+#endif
             {
                 CrazyNesting one = new CrazyNesting();
                 CrazyNesting two = new CrazyNesting();
