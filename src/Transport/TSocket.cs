@@ -23,6 +23,10 @@
 
 using System;
 using System.Net.Sockets;
+using System.Threading;
+#if NET_CORE
+using System.Threading.Tasks;
+#endif
 
 namespace Thrift.Transport
 {
@@ -134,10 +138,20 @@ namespace Thrift.Transport
 
             if( timeout == 0)            // no timeout -> infinite
             {
+#if NET_CORE
+                client.ConnectAsync(host, port).Wait();
+#else
                 client.Connect(host, port);
+#endif
             }
             else                        // we have a timeout -> use it
             {
+#if NET_CORE
+
+                var connectTask = client.ConnectAsync(host, port);
+                if (connectTask != Task.WhenAny(connectTask, Task.Delay(timeout)).Result || !client.Connected)
+                    throw new TTransportException(TTransportException.ExceptionType.TimedOut, "Connect timed out");
+#else
                 ConnectHelper hlp = new ConnectHelper(client);
                 IAsyncResult asyncres = client.BeginConnect(host, port, new AsyncCallback(ConnectCallback), hlp);
                 bool bConnected = asyncres.AsyncWaitHandle.WaitOne(timeout) && client.Connected;
@@ -147,8 +161,13 @@ namespace Thrift.Transport
                     {
                         if( hlp.CallbackDone)
                         {
+#if NET_CORE
+                            asyncres.AsyncWaitHandle.Dispose();
+                            client.Dispose();
+#else
                             asyncres.AsyncWaitHandle.Close();
                             client.Close();
+#endif
                         }
                         else
                         {
@@ -158,13 +177,14 @@ namespace Thrift.Transport
                     }
                     throw new TTransportException(TTransportException.ExceptionType.TimedOut, "Connect timed out");
                 }
+#endif
             }
 
             inputStream = client.GetStream();
             outputStream = client.GetStream();
         }
 
-
+#if !NET_CORE
         static void ConnectCallback(IAsyncResult asyncres)
         {
             ConnectHelper hlp = asyncres.AsyncState as ConnectHelper;
@@ -218,6 +238,7 @@ namespace Thrift.Transport
                 client = null;
             }
         }
+#endif
 
     #region " IDisposable Support "
     private bool _IsDisposed;

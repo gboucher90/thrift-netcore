@@ -20,7 +20,7 @@
  * Please see doc/old-thrift-license.txt in the Thrift distribution for
  * details.
  */
-
+#if !NET_CORE
 using System;
 using System.Threading;
 using Thrift.Protocol;
@@ -210,3 +210,4 @@ namespace Thrift.Server
     }
   }
 }
+#endif

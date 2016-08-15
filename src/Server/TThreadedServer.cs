@@ -246,12 +246,14 @@ namespace Thrift.Server
     {
       stop = true;
       serverTransport.Close();
+#if !NET_CORE
       //clean up all the threads myself
       workerThread.Abort();
       foreach (Thread t in clientThreads)
       {
         t.Abort();
       }
+#endif
     }
   }
 }

@@ -20,7 +20,9 @@
  */
 
 using System;
+#if !NET_CORE
 using System.Web;
+#endif
 using System.Net;
 using System.IO;
 
@@ -28,7 +30,11 @@ using Thrift.Protocol;
 
 namespace Thrift.Transport
 {
+#if NET_CORE
+    public class THttpHandler
+#else
     public class THttpHandler : IHttpHandler
+#endif
     {
         protected TProcessor processor;
 
@@ -56,7 +62,7 @@ namespace Thrift.Transport
             this.inputProtocolFactory = inputProtocolFactory;
             this.outputProtocolFactory = outputProtocolFactory;
         }
-
+#if !NET_CORE
         public void ProcessRequest(HttpListenerContext context)
         {
             context.Response.ContentType = contentType;
@@ -70,7 +76,7 @@ namespace Thrift.Transport
             context.Response.ContentEncoding = encoding;
             ProcessRequest(context.Request.InputStream, context.Response.OutputStream);
         }
-
+#endif
         public void ProcessRequest(Stream input, Stream output)
         {
             TTransport transport = new TStreamTransport(input,output);

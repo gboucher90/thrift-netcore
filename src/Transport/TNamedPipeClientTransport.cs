@@ -62,7 +62,7 @@ namespace Thrift.Transport
         {
             if (client != null)
             {
-                client.Close();
+                client.Dispose();
                 client = null;
             }
         }

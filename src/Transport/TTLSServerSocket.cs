@@ -159,7 +159,11 @@ namespace Thrift.Transport
 
             try
             {
+#if NET_CORE
+                TcpClient client = this.server.AcceptTcpClientAsync().Result;
+#else
                 TcpClient client = this.server.AcceptTcpClient();
+#endif
                 client.SendTimeout = client.ReceiveTimeout = this.clientTimeout;
 
                 //wrap the client in an SSL Socket passing in the SSL cert

@@ -64,12 +64,12 @@ namespace Thrift.Transport
         {
             if (inputStream != null)
             {
-                inputStream.Close();
+                inputStream.Dispose();
                 inputStream = null;
             }
             if (outputStream != null)
             {
-                outputStream.Close();
+                outputStream.Dispose();
                 outputStream = null;
             }
         }

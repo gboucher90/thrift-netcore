@@ -21,13 +21,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-#if SILVERLIGHT
+#if SILVERLIGHT || NET_CORE
 using System.Runtime.Serialization;
 #endif
 
 namespace Thrift.Collections
 {
-#if SILVERLIGHT
+#if SILVERLIGHT || NET_CORE
     [DataContract]
 #else
     [Serializable]
@@ -35,7 +35,7 @@ namespace Thrift.Collections
     public class THashSet<T> : ICollection<T>
     {
 #if NET_2_0 || SILVERLIGHT
-#if SILVERLIGHT
+#if SILVERLIGHT || NET_CORE
         [DataMember]
 #endif
         TDictSet<T> set = new TDictSet<T>();
@@ -88,12 +88,12 @@ namespace Thrift.Collections
         }
 
 #if NET_2_0 || SILVERLIGHT
-#if SILVERLIGHT
+#if SILVERLIGHT || NET_CORE
         [DataContract]
 #endif
         private class TDictSet<V> : ICollection<V>
         {
-#if SILVERLIGHT
+#if SILVERLIGHT || NET_CORE
             [DataMember]
 #endif
             Dictionary<V, TDictSet<V>> dict = new Dictionary<V, TDictSet<V>>();

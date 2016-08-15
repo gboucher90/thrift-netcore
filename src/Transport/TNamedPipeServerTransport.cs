@@ -53,7 +53,6 @@ namespace Thrift.Transport
             {
                 try
                 {
-                    stream.Close();
                     stream.Dispose();
                 }
                 finally
@@ -102,6 +101,7 @@ namespace Thrift.Transport
             {
                 EnsurePipeInstance();
 
+#if !NET_CORE
                 if (asyncMode)
                 {
                     var evt = new ManualResetEvent(false);
@@ -135,6 +135,9 @@ namespace Thrift.Transport
                 {
                     stream.WaitForConnection();
                 }
+#else
+                stream.WaitForConnectionAsync().Wait();
+#endif
 
                 var trans = new ServerTransport(stream,asyncMode);
                 stream = null;  // pass ownership to ServerTransport
@@ -175,7 +178,7 @@ namespace Thrift.Transport
             public override void Close()
             {
                 if (stream != null)
-                    stream.Close();
+                    stream.Dispose();
             }
 
             public override int Read(byte[] buf, int off, int len)
@@ -184,7 +187,7 @@ namespace Thrift.Transport
                 {
                     throw new TTransportException(TTransportException.ExceptionType.NotOpen);
                 }
-
+#if !NET_CORE
                 if (asyncMode)
                 {
                     Exception eOuter = null;
@@ -221,6 +224,9 @@ namespace Thrift.Transport
                 {
                     return stream.Read(buf, off, len);
                 }
+#else
+                return stream.Read(buf, off, len);
+#endif
             }
 
             public override void Write(byte[] buf, int off, int len)
@@ -230,6 +236,7 @@ namespace Thrift.Transport
                     throw new TTransportException(TTransportException.ExceptionType.NotOpen);
                 }
 
+#if !NET_CORE
                 if (asyncMode)
                 {
                     Exception eOuter = null;
@@ -263,6 +270,9 @@ namespace Thrift.Transport
                 {
                     stream.Write(buf, off, len);
                 }
+#else
+                stream.Write(buf, off, len);
+#endif
 
             }
 

@@ -109,12 +109,12 @@ namespace Thrift.Transport
         {
             if (inputStream != null)
             {
-                inputStream.Close();
+                inputStream.Dispose();
                 inputStream = null;
             }
             if (outputStream != null)
             {
-                outputStream.Close();
+                outputStream.Dispose();
                 outputStream = null;
             }
         }
@@ -168,16 +168,29 @@ namespace Thrift.Transport
                 HttpWebRequest connection = CreateRequest();
 
                 byte[] data = outputStream.ToArray();
-                connection.ContentLength = data.Length;
 
+#if NET_CORE
+                connection.Headers[HttpRequestHeader.ContentLength] = data.Length.ToString();
+#else
+                connection.ContentLength = data.Length;
+#endif
+
+#if NET_CORE
+                using (Stream requestStream = connection.GetRequestStreamAsync().Result)
+#else
                 using (Stream requestStream = connection.GetRequestStream())
+#endif
                 {
                     requestStream.Write(data, 0, data.Length);
 
                     // Resolve HTTP hang that can happens after successive calls by making sure
                     // that we release the response and response stream. To support this, we copy
                     // the response to a memory stream.
+#if NET_CORE
+                    using (var response = connection.GetResponseAsync().Result)
+#else
                     using (var response = connection.GetResponse())
+#endif
                     {
                         using (var responseStream = response.GetResponseStream())
                         {
@@ -188,7 +201,7 @@ namespace Thrift.Transport
                             int bytesRead;
                             while ((bytesRead = responseStream.Read(buffer, 0, buffer.Length)) > 0)
                             {
-                                inputStream.Write (buffer, 0, bytesRead);
+                                inputStream.Write(buffer, 0, bytesRead);
                             }
                             inputStream.Seek(0, 0);
                         }
@@ -210,7 +223,7 @@ namespace Thrift.Transport
             HttpWebRequest connection = (HttpWebRequest)WebRequest.Create(uri);
 
 
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NET_CORE
             // Adding certificates through code is not supported with WP7 Silverlight
             // see "Windows Phone 7 and Certificates_FINAL_121610.pdf"
             connection.ClientCertificates.AddRange(certificates);
@@ -227,16 +240,20 @@ namespace Thrift.Transport
             // Make the request
             connection.ContentType = "application/x-thrift";
             connection.Accept = "application/x-thrift";
+#if NET_CORE
+            connection.Headers[HttpRequestHeader.UserAgent] = "C#/THttpClient";
+#else
             connection.UserAgent = "C#/THttpClient";
+#endif
             connection.Method = "POST";
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NET_CORE
             connection.ProtocolVersion = HttpVersion.Version10;
 #endif
 
             //add custom headers here
             foreach (KeyValuePair<string, string> item in customHeaders)
             {
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !NET_CORE
                 connection.Headers.Add(item.Key, item.Value);
 #else
                 connection.Headers[item.Key] = item.Value;
@@ -286,7 +303,11 @@ namespace Thrift.Transport
                 {
                     var waitHandle = flushAsyncResult.AsyncWaitHandle;
                     waitHandle.WaitOne();  // blocking INFINITEly
+#if NET_CORE
+                    waitHandle.Dispose();
+#else
                     waitHandle.Close();
+#endif
                 }
 
                 if (flushAsyncResult.AsyncException != null)
@@ -308,7 +329,7 @@ namespace Thrift.Transport
                 var reqStream = flushAsyncResult.Connection.EndGetRequestStream(asynchronousResult);
                 reqStream.Write(flushAsyncResult.Data, 0, flushAsyncResult.Data.Length);
                 reqStream.Flush();
-                reqStream.Close();
+                reqStream.Dispose();
 
                 // Start the asynchronous operation to get the response
                 flushAsyncResult.Connection.BeginGetResponse(GetResponseCallback, flushAsyncResult);

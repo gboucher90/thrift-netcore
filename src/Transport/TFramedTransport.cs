@@ -101,7 +101,13 @@ namespace Thrift.Transport
 
         public override void Flush()
         {
-            byte[] buf = writeBuffer.GetBuffer();
+            byte[] buf;
+#if NET_CORE
+            ArraySegment<byte> arraySegment;
+            buf = writeBuffer.TryGetBuffer(out arraySegment) ? arraySegment.Array : writeBuffer.ToArray();
+#else
+            buf = writeBuffer.GetBuffer();
+#endif
             int len = (int)writeBuffer.Length;
             int data_len = len - header_size;
             if ( data_len < 0 )

@@ -58,11 +58,11 @@ namespace Thrift.Transport
         {
             if (inputBuffer != null && inputBuffer.CanRead)
             {
-                inputBuffer.Close();
+                inputBuffer.Dispose();
             }
             if (outputBuffer != null && outputBuffer.CanWrite)
             {
-                outputBuffer.Close();
+                outputBuffer.Dispose();
             }
         }
 
