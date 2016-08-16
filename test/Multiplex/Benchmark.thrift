@@ -1,5 +1,3 @@
-#!/bin/sh
-
 #
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements. See the NOTICE file
@@ -19,16 +17,8 @@
 # under the License.
 #
 
-../../../../compiler/cpp/thrift --gen csharp  ../../../../contrib/async-test/aggr.thrift
-../../../../compiler/cpp/thrift --gen csharp  ../../../rb/benchmark/Benchmark.thrift
-gmcs /t:library /out:./ThriftImpl.dll /recurse:./gen-csharp/* /reference:../../Thrift.dll Multiplex.Test.Common.cs
-gmcs  /out:MultiplexClient.exe /reference:../../Thrift.dll /reference:ThriftImpl.dll Client/Multiplex.Test.Client.cs
-gmcs  /out:MultiplexServer.exe /reference:../../Thrift.dll /reference:ThriftImpl.dll Server/Multiplex.Test.Server.cs
+namespace rb ThriftBenchmark
 
-
-
-export MONO_PATH=../../
-
-timeout 120 ./MultiplexServer.exe &
-sleep 3;
-./MultiplexClient.exe
+service BenchmarkService {
+  i32 fibonacci(1:byte n)
+}

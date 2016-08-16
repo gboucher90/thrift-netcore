@@ -80,7 +80,7 @@ namespace Test.Multiplex.Server
             }
         }
 
-       static void Execute()
+       public static void Execute()
        {
            try
            {
@@ -118,14 +118,6 @@ namespace Test.Multiplex.Server
            Console.WriteLine( "done.");
        }
 
-
-       static void Main(string[] args)
-       {
-           Execute();
-       }
     }
-
-
-
 }
 

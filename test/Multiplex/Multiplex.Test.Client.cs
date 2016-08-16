@@ -44,27 +44,27 @@ namespace Test.Multiplex.Client
 
                 TMultiplexedProtocol multiplex;
 
-                multiplex = new TMultiplexedProtocol( Protocol, Constants.NAME_BENCHMARKSERVICE);
-                BenchmarkService.Iface bench = new BenchmarkService.Client( multiplex);
+                multiplex = new TMultiplexedProtocol(Protocol, Constants.NAME_BENCHMARKSERVICE);
+                BenchmarkService.Iface bench = new BenchmarkService.Client(multiplex);
 
-                multiplex = new TMultiplexedProtocol( Protocol, Constants.NAME_AGGR);
-                Aggr.Iface aggr = new Aggr.Client( multiplex);
+                multiplex = new TMultiplexedProtocol(Protocol, Constants.NAME_AGGR);
+                Aggr.Iface aggr = new Aggr.Client(multiplex);
 
                 sbyte i;
-                for( i = 1; 10 >= i; ++i)
+                for (i = 1; 10 >= i; ++i)
                 {
-                    aggr.addValue( bench.fibonacci(i));
+                    aggr.addValue(bench.fibonacci(i));
                 }
 
-                foreach( int k in aggr.getValues())
+                foreach (int k in aggr.getValues())
                 {
-                    Console.Write(k.ToString()+" ");
+                    Console.Write(k + " ");
                     Console.WriteLine("");
                 }
             }
-            catch( Exception e)
+            catch (Exception e)
             {
-                Console.WriteLine( e.Message);
+                Console.WriteLine(e.Message);
             }
         }
 
@@ -73,13 +73,6 @@ namespace Test.Multiplex.Client
         {
             TestClient client = new TestClient();
             client.Run();
-        }
-
-        static void Main(string[] args)
-        {
-            Execute();
-            Console.WriteLine("done.");
-            Console.ReadLine();
         }
 
     }
