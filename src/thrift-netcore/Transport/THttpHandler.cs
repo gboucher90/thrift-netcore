@@ -19,11 +19,10 @@
  *
  */
 
-using System;
 #if !NET_CORE
 using System.Web;
-#endif
 using System.Net;
+#endif
 using System.IO;
 
 using Thrift.Protocol;

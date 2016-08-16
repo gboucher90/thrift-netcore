@@ -22,9 +22,10 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.IO.Pipes;
+#if !NET_CORE
 using System.Threading;
+#endif
 
 namespace Thrift.Transport
 {
@@ -34,7 +35,7 @@ namespace Thrift.Transport
         /// This is the address of the Pipe on the localhost.
         /// </summary>
         private readonly string pipeAddress;
-        private NamedPipeServerStream stream = null;
+        private NamedPipeServerStream stream;
         private bool asyncMode = true;
 
         public TNamedPipeServerTransport(string pipeAddress)
@@ -157,7 +158,7 @@ namespace Thrift.Transport
 
         private class ServerTransport : TTransport
         {
-            private NamedPipeServerStream stream;
+            private readonly NamedPipeServerStream stream;
             private bool asyncMode;
 
             public ServerTransport(NamedPipeServerStream stream, bool asyncMode)

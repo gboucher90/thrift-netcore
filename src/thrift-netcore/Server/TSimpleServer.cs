@@ -32,7 +32,7 @@ namespace Thrift.Server
   /// </summary>
   public class TSimpleServer : TServer
   {
-    private bool stop = false;
+    private bool stop;
 
     public TSimpleServer(TProcessor processor,
               TServerTransport serverTransport)

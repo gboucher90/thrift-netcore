@@ -50,43 +50,43 @@ namespace Thrift.Protocol
             }
         }
 
-        private static byte[] COMMA = new byte[] { (byte)',' };
-        private static byte[] COLON = new byte[] { (byte)':' };
-        private static byte[] LBRACE = new byte[] { (byte)'{' };
-        private static byte[] RBRACE = new byte[] { (byte)'}' };
-        private static byte[] LBRACKET = new byte[] { (byte)'[' };
-        private static byte[] RBRACKET = new byte[] { (byte)']' };
-        private static byte[] QUOTE = new byte[] { (byte)'"' };
-        private static byte[] BACKSLASH = new byte[] { (byte)'\\' };
+        private static readonly byte[] COMMA = new byte[] { (byte)',' };
+        private static readonly byte[] COLON = new byte[] { (byte)':' };
+        private static readonly byte[] LBRACE = new byte[] { (byte)'{' };
+        private static readonly byte[] RBRACE = new byte[] { (byte)'}' };
+        private static readonly byte[] LBRACKET = new byte[] { (byte)'[' };
+        private static readonly byte[] RBRACKET = new byte[] { (byte)']' };
+        private static readonly byte[] QUOTE = new byte[] { (byte)'"' };
+        private static readonly byte[] BACKSLASH = new byte[] { (byte)'\\' };
 
-        private byte[] ESCSEQ = new byte[] { (byte)'\\', (byte)'u', (byte)'0', (byte)'0' };
+        private readonly byte[] ESCSEQ = new byte[] { (byte)'\\', (byte)'u', (byte)'0', (byte)'0' };
 
         private const long VERSION = 1;
-        private byte[] JSON_CHAR_TABLE = {
+        private readonly byte[] JSON_CHAR_TABLE = {
     0,  0,  0,  0,  0,  0,  0,  0,(byte)'b',(byte)'t',(byte)'n',  0,(byte)'f',(byte)'r',  0,  0,
     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
     1,  1,(byte)'"',  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,
   };
 
-        private char[] ESCAPE_CHARS = "\"\\/bfnrt".ToCharArray();
+        private readonly char[] ESCAPE_CHARS = "\"\\/bfnrt".ToCharArray();
 
-        private byte[] ESCAPE_CHAR_VALS = {
+        private readonly byte[] ESCAPE_CHAR_VALS = {
     (byte)'"', (byte)'\\', (byte)'/', (byte)'\b', (byte)'\f', (byte)'\n', (byte)'\r', (byte)'\t',
   };
 
         private const int DEF_STRING_SIZE = 16;
 
-        private static byte[] NAME_BOOL = new byte[] { (byte)'t', (byte)'f' };
-        private static byte[] NAME_BYTE = new byte[] { (byte)'i', (byte)'8' };
-        private static byte[] NAME_I16 = new byte[] { (byte)'i', (byte)'1', (byte)'6' };
-        private static byte[] NAME_I32 = new byte[] { (byte)'i', (byte)'3', (byte)'2' };
-        private static byte[] NAME_I64 = new byte[] { (byte)'i', (byte)'6', (byte)'4' };
-        private static byte[] NAME_DOUBLE = new byte[] { (byte)'d', (byte)'b', (byte)'l' };
-        private static byte[] NAME_STRUCT = new byte[] { (byte)'r', (byte)'e', (byte)'c' };
-        private static byte[] NAME_STRING = new byte[] { (byte)'s', (byte)'t', (byte)'r' };
-        private static byte[] NAME_MAP = new byte[] { (byte)'m', (byte)'a', (byte)'p' };
-        private static byte[] NAME_LIST = new byte[] { (byte)'l', (byte)'s', (byte)'t' };
-        private static byte[] NAME_SET = new byte[] { (byte)'s', (byte)'e', (byte)'t' };
+        private static readonly byte[] NAME_BOOL = new byte[] { (byte)'t', (byte)'f' };
+        private static readonly byte[] NAME_BYTE = new byte[] { (byte)'i', (byte)'8' };
+        private static readonly byte[] NAME_I16 = new byte[] { (byte)'i', (byte)'1', (byte)'6' };
+        private static readonly byte[] NAME_I32 = new byte[] { (byte)'i', (byte)'3', (byte)'2' };
+        private static readonly byte[] NAME_I64 = new byte[] { (byte)'i', (byte)'6', (byte)'4' };
+        private static readonly byte[] NAME_DOUBLE = new byte[] { (byte)'d', (byte)'b', (byte)'l' };
+        private static readonly byte[] NAME_STRUCT = new byte[] { (byte)'r', (byte)'e', (byte)'c' };
+        private static readonly byte[] NAME_STRING = new byte[] { (byte)'s', (byte)'t', (byte)'r' };
+        private static readonly byte[] NAME_MAP = new byte[] { (byte)'m', (byte)'a', (byte)'p' };
+        private static readonly byte[] NAME_LIST = new byte[] { (byte)'l', (byte)'s', (byte)'t' };
+        private static readonly byte[] NAME_SET = new byte[] { (byte)'s', (byte)'e', (byte)'t' };
 
         private static byte[] GetTypeNameForTypeID(TType typeID)
         {
@@ -303,7 +303,7 @@ namespace Thrift.Protocol
             }
 
             private bool hasData;
-            private byte[] data = new byte[1];
+            private readonly byte[] data = new byte[1];
 
             ///<summary>
             /// Return and consume the next byte to be Read, either taking it from the
@@ -377,7 +377,7 @@ namespace Thrift.Protocol
         }
 
         // Temporary buffer used by several methods
-        private byte[] tempBuffer = new byte[4];
+        private readonly byte[] tempBuffer = new byte[4];
 
         ///<summary>
         /// Read a byte that must match b[0]; otherwise an exception is thrown.

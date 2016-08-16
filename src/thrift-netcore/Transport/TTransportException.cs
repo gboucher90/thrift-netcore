@@ -21,8 +21,6 @@
  * details.
  */
 
-using System;
-
 namespace Thrift.Transport
 {
     public class TTransportException : TException
@@ -30,7 +28,6 @@ namespace Thrift.Transport
         protected ExceptionType type;
 
         public TTransportException()
-            : base()
         {
         }
 

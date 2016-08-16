@@ -32,37 +32,37 @@ namespace Thrift.Transport
         /// <summary>
         /// Underlying tcp server
         /// </summary>
-        private TcpListener server = null;
+        private TcpListener server;
 
         /// <summary>
         /// The port where the socket listen
         /// </summary>
-        private int port = 0;
+        private readonly int port;
 
         /// <summary>
         /// Timeout for the created server socket
         /// </summary>
-        private int clientTimeout = 0;
+        private readonly int clientTimeout = 0;
 
         /// <summary>
         /// Whether or not to wrap new TSocket connections in buffers
         /// </summary>
-        private bool useBufferedSockets = false;
+        private readonly bool useBufferedSockets;
 
         /// <summary>
         /// The servercertificate with the private- and public-key
         /// </summary>
-        private X509Certificate serverCertificate;
+        private readonly X509Certificate serverCertificate;
 
         /// <summary>
         /// The function to validate the client certificate.
         /// </summary>
-        private RemoteCertificateValidationCallback clientCertValidator;
+        private readonly RemoteCertificateValidationCallback clientCertValidator;
 
         /// <summary>
         /// The function to determine which certificate to use.
         /// </summary>
-        private LocalCertificateSelectionCallback localCertificateSelectionCallback;
+        private readonly LocalCertificateSelectionCallback localCertificateSelectionCallback;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TTLSServerSocket" /> class.

@@ -17,8 +17,6 @@
  * under the License.
  */
 
-using System;
-
 namespace Thrift.Protocol
 {
     internal static class TBase64Utils
@@ -57,7 +55,7 @@ namespace Thrift.Protocol
             }
         }
 
-        private static int[] DECODE_TABLE = {
+        private static readonly int[] DECODE_TABLE = {
             -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
             -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
             -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,62,-1,-1,-1,63,

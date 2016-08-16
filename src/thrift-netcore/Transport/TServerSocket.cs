@@ -32,22 +32,22 @@ namespace Thrift.Transport
         /**
         * Underlying server with socket
         */
-        private TcpListener server = null;
+        private TcpListener server;
 
         /**
          * Port to listen on
          */
-        private int port = 0;
+        private readonly int port;
 
         /**
          * Timeout for client sockets from accept
          */
-        private int clientTimeout = 0;
+        private readonly int clientTimeout;
 
         /**
          * Whether or not to wrap new TSocket connections in buffers
          */
-        private bool useBufferedSockets = false;
+        private readonly bool useBufferedSockets;
 
         /**
          * Creates a server socket from underlying socket object

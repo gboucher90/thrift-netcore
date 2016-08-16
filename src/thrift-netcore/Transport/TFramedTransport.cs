@@ -21,14 +21,14 @@ using System.IO;
 
 namespace Thrift.Transport
 {
-  public class TFramedTransport : TTransport, IDisposable
+  public class TFramedTransport : TTransport
     {
-        protected TTransport transport = null;
+        protected TTransport transport;
         protected MemoryStream writeBuffer;
-        protected MemoryStream readBuffer = null;
+        protected MemoryStream readBuffer;
 
         private const int header_size = 4;
-        private static byte[] header_dummy = new byte[header_size]; // used as header placeholder while initilizing new write buffer
+        private static readonly byte[] header_dummy = new byte[header_size]; // used as header placeholder while initilizing new write buffer
 
         public class Factory : TTransportFactory
         {

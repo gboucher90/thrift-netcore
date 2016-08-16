@@ -28,8 +28,8 @@ namespace Thrift.Transport
     public class TNamedPipeClientTransport : TTransport
     {
         private NamedPipeClientStream client;
-        private string ServerName;
-        private string PipeName;
+        private readonly string ServerName;
+        private readonly string PipeName;
 
         public TNamedPipeClientTransport(string pipe)
         {

@@ -17,12 +17,14 @@
  * under the License.
  */
 
-using System;
+
 using System.Collections;
 using System.Collections.Generic;
 
 #if NET_CORE
 using System.Runtime.Serialization;
+#else
+using System;
 #endif
 
 namespace Thrift.Collections

@@ -24,7 +24,6 @@
 using System;
 using Thrift.Protocol;
 using Thrift.Transport;
-using System.IO;
 
 namespace Thrift.Server
 {
@@ -37,7 +36,7 @@ namespace Thrift.Server
     protected TTransportFactory outputTransportFactory;
     protected TProtocolFactory inputProtocolFactory;
     protected TProtocolFactory outputProtocolFactory;
-    protected TServerEventHandler serverEventHandler = null;
+    protected TServerEventHandler serverEventHandler;
 
     //Methods
     public void setEventHandler(TServerEventHandler seh)
@@ -117,7 +116,7 @@ namespace Thrift.Server
       this.outputTransportFactory = outputTransportFactory;
       this.inputProtocolFactory = inputProtocolFactory;
       this.outputProtocolFactory = outputProtocolFactory;
-      this.logDelegate = (logDelegate != null) ? logDelegate : DefaultLogDelegate;
+      this.logDelegate = logDelegate ?? DefaultLogDelegate;
     }
 
     //Abstract Interface

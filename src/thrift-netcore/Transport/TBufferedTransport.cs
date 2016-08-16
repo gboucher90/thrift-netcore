@@ -17,17 +17,16 @@
  * under the License.
  */
 
-using System;
 using System.IO;
 
 namespace Thrift.Transport
 {
-  public class TBufferedTransport : TTransport, IDisposable
+  public class TBufferedTransport : TTransport
     {
         private BufferedStream inputBuffer;
         private BufferedStream outputBuffer;
-        private int bufSize;
-        private TStreamTransport transport;
+        private readonly int bufSize;
+        private readonly TStreamTransport transport;
 
         public TBufferedTransport(TStreamTransport transport)
             :this(transport, 1024)

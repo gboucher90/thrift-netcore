@@ -23,7 +23,6 @@
 
 using System;
 using System.Net.Sockets;
-using System.Threading;
 #if NET_CORE
 using System.Threading.Tasks;
 #endif
@@ -32,10 +31,10 @@ namespace Thrift.Transport
 {
     public class TSocket : TStreamTransport
     {
-        private TcpClient client = null;
-        private string host = null;
-        private int port = 0;
-        private int timeout = 0;
+        private TcpClient client;
+        private readonly string host;
+        private readonly int port;
+        private int timeout;
 
         public TSocket(TcpClient client)
         {

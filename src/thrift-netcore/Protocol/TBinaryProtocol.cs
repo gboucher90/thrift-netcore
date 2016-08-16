@@ -32,7 +32,7 @@ namespace Thrift.Protocol
         protected const uint VERSION_MASK = 0xffff0000;
         protected const uint VERSION_1 = 0x80010000;
 
-        protected bool strictRead_ = false;
+        protected bool strictRead_;
         protected bool strictWrite_ = true;
 
         #region BinaryProtocol Factory
@@ -41,7 +41,7 @@ namespace Thrift.Protocol
           */
           public class Factory : TProtocolFactory {
 
-              protected bool strictRead_ = false;
+              protected bool strictRead_;
               protected bool strictWrite_ = true;
 
               public Factory()
@@ -156,14 +156,14 @@ namespace Thrift.Protocol
             WriteByte(b ? (sbyte)1 : (sbyte)0);
         }
 
-        private byte[] bout = new byte[1];
+        private readonly byte[] bout = new byte[1];
         public override void WriteByte(sbyte b)
         {
             bout[0] = (byte)b;
             trans.Write(bout, 0, 1);
         }
 
-        private byte[] i16out = new byte[2];
+        private readonly byte[] i16out = new byte[2];
         public override void WriteI16(short s)
         {
             i16out[0] = (byte)(0xff & (s >> 8));
@@ -171,7 +171,7 @@ namespace Thrift.Protocol
             trans.Write(i16out, 0, 2);
         }
 
-        private byte[] i32out = new byte[4];
+        private readonly byte[] i32out = new byte[4];
         public override void WriteI32(int i32)
         {
             i32out[0] = (byte)(0xff & (i32 >> 24));
@@ -181,7 +181,7 @@ namespace Thrift.Protocol
             trans.Write(i32out, 0, 4);
         }
 
-        private byte[] i64out = new byte[8];
+        private readonly byte[] i64out = new byte[8];
         public override void WriteI64(long i64)
         {
             i64out[0] = (byte)(0xff & (i64 >> 56));
@@ -313,21 +313,21 @@ namespace Thrift.Protocol
             return ReadByte() == 1;
         }
 
-        private byte[] bin = new byte[1];
+        private readonly byte[] bin = new byte[1];
         public override sbyte ReadByte()
         {
             ReadAll(bin, 0, 1);
             return (sbyte)bin[0];
         }
 
-        private byte[] i16in = new byte[2];
+        private readonly byte[] i16in = new byte[2];
         public override short ReadI16()
         {
             ReadAll(i16in, 0, 2);
             return (short)(((i16in[0] & 0xff) << 8) | ((i16in[1] & 0xff)));
         }
 
-        private byte[] i32in = new byte[4];
+        private readonly byte[] i32in = new byte[4];
         public override int ReadI32()
         {
             ReadAll(i32in, 0, 4);
@@ -336,7 +336,7 @@ namespace Thrift.Protocol
 
 #pragma warning disable 675
 
-        private byte[] i64in = new byte[8];
+        private readonly byte[] i64in = new byte[8];
         public override long ReadI64()
         {
             ReadAll(i64in, 0, 8);

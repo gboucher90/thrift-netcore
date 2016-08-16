@@ -32,12 +32,12 @@ namespace Thrift.Server
   public class TThreadedServer : TServer
   {
     private const int DEFAULT_MAX_THREADS = 100;
-    private volatile bool stop = false;
+    private volatile bool stop;
     private readonly int maxThreads;
 
-    private Queue<TTransport> clientQueue;
-    private THashSet<Thread> clientThreads;
-    private object clientLock;
+    private readonly Queue<TTransport> clientQueue;
+    private readonly THashSet<Thread> clientThreads;
+    private readonly object clientLock;
     private Thread workerThread;
 
     public int ClientThreadsCount  {
@@ -172,7 +172,7 @@ namespace Thrift.Server
           }
 
           client = clientQueue.Dequeue();
-          t = new Thread(new ParameterizedThreadStart(ClientWorker));
+          t = new Thread(ClientWorker);
           clientThreads.Add(t);
         }
         //start processing requests from client on new thread
@@ -239,7 +239,6 @@ namespace Thrift.Server
         clientThreads.Remove(Thread.CurrentThread);
         Monitor.Pulse(clientLock);
       }
-      return;
     }
 
     public override void Stop()

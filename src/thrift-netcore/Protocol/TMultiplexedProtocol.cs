@@ -21,11 +21,6 @@
  * details.
  */
 
-using System;
-using System.Text;
-using Thrift.Transport;
-using System.Collections.Generic;
-
 namespace Thrift.Protocol
 {
 
@@ -60,7 +55,7 @@ namespace Thrift.Protocol
         /** Used to delimit the service name from the function name */
         public static string SEPARATOR = ":";
 
-        private string ServiceName;
+        private readonly string ServiceName;
 
         /**
          * Wrap the specified protocol, allowing it to be used to communicate with a

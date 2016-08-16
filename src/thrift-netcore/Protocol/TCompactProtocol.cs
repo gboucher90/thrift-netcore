@@ -24,18 +24,16 @@
 using System;
 using System.Text;
 using Thrift.Transport;
-using System.Collections;
-using System.IO;
 using System.Collections.Generic;
 
 namespace Thrift.Protocol
 {
     public class TCompactProtocol : TProtocol
     {
-        private static TStruct ANONYMOUS_STRUCT = new TStruct("");
-        private static TField TSTOP = new TField("", TType.Stop, (short)0);
+        private static readonly TStruct ANONYMOUS_STRUCT = new TStruct("");
+        private static readonly TField TSTOP = new TField("", TType.Stop, (short)0);
 
-        private static byte[] ttypeToCompactType = new byte[16];
+        private static readonly byte[] ttypeToCompactType = new byte[16];
 
         private const byte PROTOCOL_ID = 0x82;
         private const byte VERSION = 1;
@@ -68,21 +66,21 @@ namespace Thrift.Protocol
          * Used to keep track of the last field for the current and previous structs,
          * so we can do the delta stuff.
          */
-        private Stack<short> lastField_ = new Stack<short>(15);
+        private readonly Stack<short> lastField_ = new Stack<short>(15);
 
-        private short lastFieldId_ = 0;
+        private short lastFieldId_;
 
         /**
          * If we encounter a boolean field begin, save the TField here so it can
          * have the value incorporated.
          */
-        private Nullable<TField> booleanField_;
+        private TField? booleanField_;
 
         /**
          * If we Read a field header, and it's a boolean field, save the boolean
          * value here so that ReadBool can use it.
          */
-        private  Nullable<bool> boolValue_;
+        private  bool? boolValue_;
 
 
         #region CompactProtocol Factory
@@ -132,7 +130,7 @@ namespace Thrift.Protocol
          * Writes a byte without any possibility of all that field header nonsense.
          * Used internally by other writing methods that know they need to Write a byte.
          */
-        private byte[] byteDirectBuffer = new byte[1];
+        private readonly byte[] byteDirectBuffer = new byte[1];
         private void WriteByteDirect(byte b)
         {
             byteDirectBuffer[0] = b;
@@ -151,7 +149,7 @@ namespace Thrift.Protocol
          * Write an i32 as a varint. Results in 1-5 bytes on the wire.
          * TODO: make a permanent buffer like WriteVarint64?
          */
-        byte[] i32buf = new byte[5];
+        readonly byte[] i32buf = new byte[5];
         private void WriteVarint32(uint n)
         {
             int idx = 0;
@@ -236,7 +234,7 @@ namespace Thrift.Protocol
             // short lastField = lastField_.Pop();
 
             // if there's a type override, use that.
-            byte typeToWrite = typeOverride == 0xFF ? getCompactType(field.Type) : typeOverride;
+            byte typeToWrite = typeOverride == 0xFF ? GetCompactType(field.Type) : typeOverride;
 
             // check if we can use delta encoding for the field id
             if (field.ID > lastFieldId_ && field.ID - lastFieldId_ <= 15)
@@ -276,7 +274,7 @@ namespace Thrift.Protocol
             else
             {
                 WriteVarint32((uint)map.Count);
-                WriteByteDirect(getCompactType(map.KeyType) << 4 | getCompactType(map.ValueType));
+                WriteByteDirect(GetCompactType(map.KeyType) << 4 | GetCompactType(map.ValueType));
             }
         }
 
@@ -405,11 +403,11 @@ namespace Thrift.Protocol
         {
             if (size <= 14)
             {
-                WriteByteDirect(size << 4 | getCompactType(elemType));
+                WriteByteDirect(size << 4 | GetCompactType(elemType));
             }
             else
             {
-                WriteByteDirect(0xf0 | getCompactType(elemType));
+                WriteByteDirect(0xf0 | GetCompactType(elemType));
                 WriteVarint32((uint)size);
             }
         }
@@ -417,7 +415,7 @@ namespace Thrift.Protocol
         /**
          * Write an i64 as a varint. Results in 1-10 bytes on the wire.
          */
-        byte[] varint64out = new byte[10];
+        readonly byte[] varint64out = new byte[10];
         private void WriteVarint64(ulong n)
         {
             int idx = 0;
@@ -617,7 +615,7 @@ namespace Thrift.Protocol
             return ReadByte() == Types.BOOLEAN_TRUE;
         }
 
-        byte[] byteRawBuf = new byte[1];
+        readonly byte[] byteRawBuf = new byte[1];
         /**
          * Read a single byte off the wire. Nothing interesting here.
          */
@@ -843,7 +841,7 @@ namespace Thrift.Protocol
         /**
          * Given a TType value, find the appropriate TCompactProtocol.Types constant.
          */
-        private byte getCompactType(TType ttype)
+        private static byte GetCompactType(TType ttype)
         {
             return ttypeToCompactType[(int)ttype];
         }

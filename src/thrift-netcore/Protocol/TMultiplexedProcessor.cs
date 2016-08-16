@@ -21,9 +21,6 @@
  * details.
  */
 
-using System;
-using System.Text;
-using Thrift.Transport;
 using System.Collections.Generic;
 using System.IO;
 
@@ -52,7 +49,7 @@ namespace Thrift.Protocol
      */
     public class TMultiplexedProcessor : TProcessor
     {
-        private Dictionary<string,TProcessor> ServiceProcessorMap = new Dictionary<string,TProcessor>();
+        private readonly Dictionary<string,TProcessor> ServiceProcessorMap = new Dictionary<string,TProcessor>();
 
         /**
          * 'Register' a service with this TMultiplexedProcessor. This allows us to broker
@@ -162,7 +159,7 @@ namespace Thrift.Protocol
          */
         private class StoredMessageProtocol : TProtocolDecorator
         {
-            TMessage MsgBegin;
+            readonly TMessage MsgBegin;
 
             public StoredMessageProtocol(TProtocol protocol, TMessage messageBegin)
                 :base(protocol)

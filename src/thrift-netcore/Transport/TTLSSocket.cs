@@ -33,48 +33,48 @@ namespace Thrift.Transport
         /// <summary>
         /// Internal TCP Client
         /// </summary>
-        private TcpClient client = null;
+        private TcpClient client;
 
         /// <summary>
         /// The host
         /// </summary>
-        private string host = null;
+        private readonly string host;
 
         /// <summary>
         /// The port
         /// </summary>
-        private int port = 0;
+        private readonly int port;
 
         /// <summary>
         /// The timeout for the connection
         /// </summary>
-        private int timeout = 0;
+        private int timeout;
 
         /// <summary>
         /// Internal SSL Stream for IO
         /// </summary>
-        private SslStream secureStream = null;
+        private SslStream secureStream;
 
         /// <summary>
         /// Defines wheter or not this socket is a server socket<br/>
         /// This is used for the TLS-authentication
         /// </summary>
-        private bool isServer = false;
+        private readonly bool isServer;
 
         /// <summary>
         /// The certificate
         /// </summary>
-        private X509Certificate certificate = null;
+        private readonly X509Certificate certificate;
 
         /// <summary>
         /// User defined certificate validator.
         /// </summary>
-        private RemoteCertificateValidationCallback certValidator = null;
+        private readonly RemoteCertificateValidationCallback certValidator;
 
         /// <summary>
         /// The function to determine which certificate to use.
         /// </summary>
-        private LocalCertificateSelectionCallback localCertificateSelectionCallback;
+        private readonly LocalCertificateSelectionCallback localCertificateSelectionCallback;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TTLSSocket"/> class.

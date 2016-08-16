@@ -21,11 +21,6 @@
  * details.
  */
 
-using System;
-using System.Text;
-using Thrift.Transport;
-using System.Collections.Generic;
-
 namespace Thrift.Protocol
 {
 
@@ -40,7 +35,7 @@ namespace Thrift.Protocol
      */
     public abstract class TProtocolDecorator : TProtocol
     {
-        private TProtocol WrappedProtocol;
+        private readonly TProtocol WrappedProtocol;
 
         /**
          * Encloses the specified protocol.

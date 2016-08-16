@@ -33,8 +33,8 @@ namespace Thrift.Transport
             get;
         }
 
-        private byte[] _peekBuffer = new byte[1];
-        private bool _hasPeekByte = false;
+        private readonly byte[] _peekBuffer = new byte[1];
+        private bool _hasPeekByte;
 
         public bool Peek()
         {
