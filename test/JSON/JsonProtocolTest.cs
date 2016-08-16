@@ -18,31 +18,24 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
+using NUnit.Framework;
 using Thrift.Protocol;
 using Thrift.Transport;
 
 namespace JSONTest
 {
-    class Program
+    [TestFixture]
+    internal class JsonProtocolTest
     {
-        static void Main(string[] args)
-        {
-            TestThrift2365();  // JSON binary decodes too much data
-            TestThrift2336();  // hex encoding using \uXXXX where 0xXXXX > 0xFF
-        }
-
-
-        public static void TestThrift2365()
+        [Test]
+        [Description("JSON binary decodes too much data")]
+        public void TestThrift2365()
         {
             var rnd = new Random();
             for (var len = 0; len < 10; ++len)
             {
-                byte[] dataWritten = new byte[len];
+                var dataWritten = new byte[len];
                 rnd.NextBytes(dataWritten);
 
                 Stream stm = new MemoryStream();
@@ -55,28 +48,27 @@ namespace JSONTest
                 prot = new TJSONProtocol(trans);
                 byte[] dataRead = prot.ReadBinary();
 
-                Debug.Assert(dataRead.Length == dataWritten.Length);
-                for (var i = 0; i < dataRead.Length; ++i)
-                    Debug.Assert(dataRead[i] == dataWritten[i]);
+                CollectionAssert.AreEqual(dataWritten, dataRead);
             }
         }
 
-
-        public static void TestThrift2336()
+        [Test]
+        [Description(@"hex encoding using \uXXXX where 0xXXXX > 0xFF")]
+        public void TestThrift2336()
         {
-            const string RUSSIAN_TEXT = "\u0420\u0443\u0441\u0441\u043a\u043e\u0435 \u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435";
-            const string RUSSIAN_JSON = "\"\\u0420\\u0443\\u0441\\u0441\\u043a\\u043e\\u0435 \\u041d\\u0430\\u0437\\u0432\\u0430\\u043d\\u0438\\u0435\"";
+            const string russianText = "\u0420\u0443\u0441\u0441\u043a\u043e\u0435 \u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435";
+            const string russianJson = "\"\\u0420\\u0443\\u0441\\u0441\\u043a\\u043e\\u0435 \\u041d\\u0430\\u0437\\u0432\\u0430\\u043d\\u0438\\u0435\"";
 
             // prepare buffer with JSON data
-            byte[] rawBytes = new byte[RUSSIAN_JSON.Length];
-            for (var i = 0; i < RUSSIAN_JSON.Length; ++i)
-                rawBytes[i] = (byte)(RUSSIAN_JSON[i] & (char)0xFF);  // only low bytes
+            var rawBytes = new byte[russianJson.Length];
+            for (var i = 0; i < russianJson.Length; ++i)
+                rawBytes[i] = (byte)(russianJson[i] & (char)0xFF);  // only low bytes
 
             // parse and check
             var stm = new MemoryStream(rawBytes);
             var trans = new TStreamTransport(stm, null);
             var prot = new TJSONProtocol(trans);
-            Debug.Assert(prot.ReadString() == RUSSIAN_TEXT, "reading JSON with hex-encoded chars > 8 bit");
+            Assert.AreEqual(russianText, prot.ReadString(), "reading JSON with hex-encoded chars > 8 bit");
         }
     }
 }
