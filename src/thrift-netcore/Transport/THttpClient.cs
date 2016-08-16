@@ -42,11 +42,9 @@ namespace Thrift.Transport
 
         private int readTimeout = 30000;
 
-        private IDictionary<String, String> customHeaders = new Dictionary<string, string>();
+        private IDictionary<string, string> customHeaders = new Dictionary<string, string>();
 
-#if !SILVERLIGHT
         private IWebProxy proxy = WebRequest.DefaultWebProxy;
-#endif
 
         public THttpClient(Uri u)
             : this(u, Enumerable.Empty<X509Certificate>())
@@ -75,7 +73,7 @@ namespace Thrift.Transport
             }
         }
 
-        public IDictionary<String, String> CustomHeaders
+        public IDictionary<string, string> CustomHeaders
         {
             get
             {
@@ -83,7 +81,6 @@ namespace Thrift.Transport
             }
         }
 
-#if !SILVERLIGHT
         public IWebProxy Proxy
         {
             set
@@ -91,7 +88,6 @@ namespace Thrift.Transport
                 proxy = value;
             }
         }
-#endif
 
         public override bool IsOpen
         {
@@ -148,7 +144,6 @@ namespace Thrift.Transport
             outputStream.Write(buf, off, len);
         }
 
-#if !SILVERLIGHT
         public override void Flush()
         {
             try
@@ -217,13 +212,13 @@ namespace Thrift.Transport
                 throw new TTransportException(TTransportException.ExceptionType.Unknown, "Couldn't connect to server: " + wx);
             }
         }
-#endif
+
         private HttpWebRequest CreateRequest()
         {
             HttpWebRequest connection = (HttpWebRequest)WebRequest.Create(uri);
 
 
-#if !SILVERLIGHT && !NET_CORE
+#if !NET_CORE
             // Adding certificates through code is not supported with WP7 Silverlight
             // see "Windows Phone 7 and Certificates_FINAL_121610.pdf"
             connection.ClientCertificates.AddRange(certificates);
@@ -246,23 +241,21 @@ namespace Thrift.Transport
             connection.UserAgent = "C#/THttpClient";
 #endif
             connection.Method = "POST";
-#if !SILVERLIGHT && !NET_CORE
+#if !NET_CORE
             connection.ProtocolVersion = HttpVersion.Version10;
 #endif
 
             //add custom headers here
             foreach (KeyValuePair<string, string> item in customHeaders)
             {
-#if !SILVERLIGHT && !NET_CORE
+#if !NET_CORE
                 connection.Headers.Add(item.Key, item.Value);
 #else
                 connection.Headers[item.Key] = item.Value;
 #endif
             }
 
-#if !SILVERLIGHT
             connection.Proxy = proxy;
-#endif
 
             return connection;
         }
@@ -360,12 +353,12 @@ namespace Thrift.Transport
         // Based on http://msmvps.com/blogs/luisabreu/archive/2009/06/15/multithreading-implementing-the-iasyncresult-interface.aspx
         class FlushAsyncResult : IAsyncResult
         {
-            private volatile Boolean _isCompleted;
+            private volatile bool _isCompleted;
             private ManualResetEvent _evt;
             private readonly AsyncCallback _cbMethod;
-            private readonly Object _state;
+            private readonly object _state;
 
-            public FlushAsyncResult(AsyncCallback cbMethod, Object state)
+            public FlushAsyncResult(AsyncCallback cbMethod, object state)
             {
                 _cbMethod = cbMethod;
                 _state = state;
@@ -391,7 +384,7 @@ namespace Thrift.Transport
             {
                 get { return _isCompleted; }
             }
-            private readonly Object _locker = new Object();
+            private readonly object _locker = new object();
             private ManualResetEvent GetEvtHandle()
             {
                 lock (_locker)

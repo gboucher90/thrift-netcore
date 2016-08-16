@@ -21,27 +21,25 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-#if SILVERLIGHT || NET_CORE
+#if NET_CORE
 using System.Runtime.Serialization;
 #endif
 
 namespace Thrift.Collections
 {
-#if SILVERLIGHT || NET_CORE
+#if NET_CORE
     [DataContract]
 #else
     [Serializable]
 #endif
     public class THashSet<T> : ICollection<T>
     {
-#if NET_2_0 || SILVERLIGHT
-#if SILVERLIGHT || NET_CORE
+
+#if NET_CORE
         [DataMember]
 #endif
-        TDictSet<T> set = new TDictSet<T>();
-#else
-        HashSet<T> set = new HashSet<T>();
-#endif
+        readonly HashSet<T> set = new HashSet<T>();
+
         public int Count
         {
             get { return set.Count; }
@@ -86,75 +84,5 @@ namespace Thrift.Collections
         {
             return set.Remove(item);
         }
-
-#if NET_2_0 || SILVERLIGHT
-#if SILVERLIGHT || NET_CORE
-        [DataContract]
-#endif
-        private class TDictSet<V> : ICollection<V>
-        {
-#if SILVERLIGHT || NET_CORE
-            [DataMember]
-#endif
-            Dictionary<V, TDictSet<V>> dict = new Dictionary<V, TDictSet<V>>();
-
-            public int Count
-            {
-                get { return dict.Count; }
-            }
-
-            public bool IsReadOnly
-            {
-                get { return false; }
-            }
-
-            public IEnumerator GetEnumerator()
-            {
-                return ((IEnumerable)dict.Keys).GetEnumerator();
-            }
-
-            IEnumerator<V> IEnumerable<V>.GetEnumerator()
-            {
-                return dict.Keys.GetEnumerator();
-            }
-
-            public bool Add(V item)
-            {
-                if (!dict.ContainsKey(item))
-                {
-                    dict[item] = this;
-                    return true;
-                }
-
-                return false;
-            }
-
-            void ICollection<V>.Add(V item)
-            {
-                Add(item);
-            }
-
-            public void Clear()
-            {
-                dict.Clear();
-            }
-
-            public bool Contains(V item)
-            {
-                return dict.ContainsKey(item);
-            }
-
-            public void CopyTo(V[] array, int arrayIndex)
-            {
-                dict.Keys.CopyTo(array, arrayIndex);
-            }
-
-            public bool Remove(V item)
-            {
-                return dict.Remove(item);
-            }
-        }
-#endif
     }
-
 }

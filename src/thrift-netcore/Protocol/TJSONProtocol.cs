@@ -486,7 +486,7 @@ namespace Thrift.Protocol
         private void WriteJSONInteger(long num)
         {
             context.Write();
-            String str = num.ToString();
+            string str = num.ToString();
 
             bool escapeNum = context.EscapeNumbers();
             if (escapeNum)
@@ -505,7 +505,7 @@ namespace Thrift.Protocol
         private void WriteJSONDouble(double num)
         {
             context.Write();
-            String str = num.ToString(CultureInfo.InvariantCulture);
+            string str = num.ToString(CultureInfo.InvariantCulture);
             bool special = false;
 
             switch (str[0])
@@ -698,7 +698,7 @@ namespace Thrift.Protocol
             WriteJSONDouble(dub);
         }
 
-        public override void WriteString(String str)
+        public override void WriteString(string str)
         {
             byte[] b = utf8Encoding.GetBytes(str);
             WriteJSONString(b);
@@ -801,7 +801,7 @@ namespace Thrift.Protocol
         /// Read in a sequence of characters that are all valid in JSON numbers. Does
         /// not do a complete regex check to validate that this is actually a number.
         ////</summary>
-        private String ReadJSONNumericChars()
+        private string ReadJSONNumericChars()
         {
             StringBuilder strbld = new StringBuilder();
             while (true)
@@ -826,14 +826,14 @@ namespace Thrift.Protocol
             {
                 ReadJSONSyntaxChar(QUOTE);
             }
-            String str = ReadJSONNumericChars();
+            string str = ReadJSONNumericChars();
             if (context.EscapeNumbers())
             {
                 ReadJSONSyntaxChar(QUOTE);
             }
             try
             {
-                return Int64.Parse(str);
+                return long.Parse(str);
             }
             catch (FormatException)
             {
@@ -852,10 +852,10 @@ namespace Thrift.Protocol
             if (reader.Peek() == QUOTE[0])
             {
                 byte[] arr = ReadJSONString(true);
-                double dub = Double.Parse(utf8Encoding.GetString(arr,0,arr.Length), CultureInfo.InvariantCulture);
+                double dub = double.Parse(utf8Encoding.GetString(arr,0,arr.Length), CultureInfo.InvariantCulture);
 
-                if (!context.EscapeNumbers() && !Double.IsNaN(dub) &&
-                    !Double.IsInfinity(dub))
+                if (!context.EscapeNumbers() && !double.IsNaN(dub) &&
+                    !double.IsInfinity(dub))
                 {
                     // Throw exception -- we should not be in a string in this case
                     throw new TProtocolException(TProtocolException.INVALID_DATA,
@@ -872,7 +872,7 @@ namespace Thrift.Protocol
                 }
                 try
                 {
-                    return Double.Parse(ReadJSONNumericChars(), CultureInfo.InvariantCulture);
+                    return double.Parse(ReadJSONNumericChars(), CultureInfo.InvariantCulture);
                 }
                 catch (FormatException)
                 {
@@ -1075,7 +1075,7 @@ namespace Thrift.Protocol
             return ReadJSONDouble();
         }
 
-        public override String ReadString()
+        public override string ReadString()
         {
             var buf = ReadJSONString(false);
             return utf8Encoding.GetString(buf,0,buf.Length);

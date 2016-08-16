@@ -52,7 +52,7 @@ namespace Thrift.Protocol
      */
     public class TMultiplexedProcessor : TProcessor
     {
-        private Dictionary<String,TProcessor> ServiceProcessorMap = new Dictionary<String,TProcessor>();
+        private Dictionary<string,TProcessor> ServiceProcessorMap = new Dictionary<string,TProcessor>();
 
         /**
          * 'Register' a service with this TMultiplexedProcessor. This allows us to broker
@@ -64,7 +64,7 @@ namespace Thrift.Protocol
          * - processor      Implementation of a service, usually referred to as "handlers",
          *                  e.g. WeatherReportHandler implementing WeatherReport.Iface.
          */
-        public void RegisterProcessor(String serviceName, TProcessor processor)
+        public void RegisterProcessor(string serviceName, TProcessor processor)
         {
             ServiceProcessorMap.Add(serviceName, processor);
         }

@@ -97,7 +97,7 @@ namespace Thrift.Server
         TTransport outputTransport = null;
         TProtocol inputProtocol = null;
         TProtocol outputProtocol = null;
-        Object connectionContext = null;
+        object connectionContext = null;
         try
         {
           using (client = serverTransport.Accept())

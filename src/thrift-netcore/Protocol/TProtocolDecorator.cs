@@ -148,7 +148,7 @@ namespace Thrift.Protocol
             WrappedProtocol.WriteDouble(v);
         }
 
-        public override void WriteString(String s)
+        public override void WriteString(string s)
         {
             WrappedProtocol.WriteString(s);
         }
@@ -248,7 +248,7 @@ namespace Thrift.Protocol
             return WrappedProtocol.ReadDouble();
         }
 
-        public override String ReadString()
+        public override string ReadString()
         {
             return WrappedProtocol.ReadString();
         }

@@ -82,7 +82,7 @@ namespace Thrift.Protocol
          * If we Read a field header, and it's a boolean field, save the boolean
          * value here so that ReadBool can use it.
          */
-        private  Nullable<Boolean> boolValue_;
+        private  Nullable<bool> boolValue_;
 
 
         #region CompactProtocol Factory
@@ -302,7 +302,7 @@ namespace Thrift.Protocol
          * right type header is for the value and then Write the field header.
          * Otherwise, Write a single byte.
          */
-        public override void WriteBool(Boolean b)
+        public override void WriteBool(bool b)
         {
             if (booleanField_ != null)
             {
@@ -362,7 +362,7 @@ namespace Thrift.Protocol
         /**
          * Write a string to the wire with a varint size preceding.
          */
-        public override void WriteString(String str)
+        public override void WriteString(string str)
         {
             byte[] bytes = UTF8Encoding.UTF8.GetBytes(str);
             WriteBinary(bytes, 0, bytes.Length);
@@ -493,7 +493,7 @@ namespace Thrift.Protocol
             }
             byte type = (byte)((versionAndType >> TYPE_SHIFT_AMOUNT) & TYPE_BITS);
             int seqid = (int)ReadVarint32();
-            String messageName = ReadString();
+            string messageName = ReadString();
             return new TMessage(messageName, (TMessageType)type, seqid);
         }
 
@@ -606,7 +606,7 @@ namespace Thrift.Protocol
          * already have been Read during ReadFieldBegin, so we'll just consume the
          * pre-stored value. Otherwise, Read a byte.
          */
-        public override Boolean ReadBool()
+        public override bool ReadBool()
         {
             if (boolValue_ != null)
             {
@@ -664,7 +664,7 @@ namespace Thrift.Protocol
         /**
          * Reads a byte[] (via ReadBinary), and then UTF-8 decodes it.
          */
-        public override String ReadString()
+        public override string ReadString()
         {
             int length = (int)ReadVarint32();
 
@@ -796,7 +796,7 @@ namespace Thrift.Protocol
         // type testing and converting
         //
 
-        private Boolean isBoolType(byte b)
+        private bool isBoolType(byte b)
         {
             int lowerNibble = b & 0x0f;
             return lowerNibble == Types.BOOLEAN_TRUE || lowerNibble == Types.BOOLEAN_FALSE;

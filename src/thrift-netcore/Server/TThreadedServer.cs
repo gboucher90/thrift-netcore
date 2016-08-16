@@ -180,14 +180,14 @@ namespace Thrift.Server
       }
     }
 
-    private void ClientWorker(Object context)
+    private void ClientWorker(object context)
     {
       TTransport client = (TTransport)context;
       TTransport inputTransport = null;
       TTransport outputTransport = null;
       TProtocol inputProtocol = null;
       TProtocol outputProtocol = null;
-      Object connectionContext = null;
+      object connectionContext = null;
       try
       {
         using (inputTransport = inputTransportFactory.GetTransport(client))

@@ -58,9 +58,9 @@ namespace Thrift.Protocol
     {
 
         /** Used to delimit the service name from the function name */
-        public static String SEPARATOR = ":";
+        public static string SEPARATOR = ":";
 
-        private String ServiceName;
+        private string ServiceName;
 
         /**
          * Wrap the specified protocol, allowing it to be used to communicate with a
@@ -72,7 +72,7 @@ namespace Thrift.Protocol
          *  protocol        Your communication protocol of choice, e.g. TBinaryProtocol
          *  serviceName     The service name of the service communicating via this protocol.
          */
-        public TMultiplexedProtocol(TProtocol protocol, String serviceName)
+        public TMultiplexedProtocol(TProtocol protocol, string serviceName)
             : base(protocol)
         {
             ServiceName = serviceName;

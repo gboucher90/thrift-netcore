@@ -260,7 +260,7 @@ namespace Thrift.Transport
                 throw new TTransportException(TTransportException.ExceptionType.AlreadyOpen, "Socket already connected");
             }
 
-            if (String.IsNullOrEmpty(host))
+            if (string.IsNullOrEmpty(host))
             {
                 throw new TTransportException(TTransportException.ExceptionType.NotOpen, "Cannot open null host");
             }
