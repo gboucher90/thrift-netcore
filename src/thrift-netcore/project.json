@@ -1,4 +1,17 @@
 ﻿{
+  "configurations": {
+    "Debug": {
+      "buildOptions": {
+        "define": [ "DEBUG" ]
+      }
+    },
+    "Release": {
+      "buildOptions": {
+        "define": [ "RELEASE" ],
+        "optimize": true
+      }
+    }
+  },
   "frameworks": {
     "netstandard1.5": {
       "dependencies": {
