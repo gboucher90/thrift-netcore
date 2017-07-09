@@ -23,7 +23,7 @@
 
 using System;
 using System.Net.Sockets;
-#if NETSTANDARD1_5
+#if NETSTANDARD1_4 || NETSTANDARD1_5
 using System.Threading.Tasks;
 #endif
 
@@ -137,7 +137,7 @@ namespace Thrift.Transport
 
             if( timeout == 0)            // no timeout -> infinite
             {
-#if NETSTANDARD1_5
+#if NETSTANDARD1_4 || NETSTANDARD1_5
                 client.ConnectAsync(host, port).Wait();
 #else
                 client.Connect(host, port);
@@ -145,7 +145,7 @@ namespace Thrift.Transport
             }
             else                        // we have a timeout -> use it
             {
-#if NETSTANDARD1_5
+#if NETSTANDARD1_4 || NETSTANDARD1_5
 
                 var connectTask = client.ConnectAsync(host, port);
                 if (connectTask != Task.WhenAny(connectTask, Task.Delay(timeout)).Result || !client.Connected)
@@ -160,7 +160,7 @@ namespace Thrift.Transport
                     {
                         if( hlp.CallbackDone)
                         {
-#if NETSTANDARD1_5
+#if NETSTANDARD1_4 || NETSTANDARD1_5
                             asyncres.AsyncWaitHandle.Dispose();
                             client.Dispose();
 #else
@@ -183,7 +183,7 @@ namespace Thrift.Transport
             outputStream = client.GetStream();
         }
 
-#if !NETSTANDARD1_5
+#if !(NETSTANDARD1_4 || NETSTANDARD1_5)
         static void ConnectCallback(IAsyncResult asyncres)
         {
             ConnectHelper hlp = asyncres.AsyncState as ConnectHelper;

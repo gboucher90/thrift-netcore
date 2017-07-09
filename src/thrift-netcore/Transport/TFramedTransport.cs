@@ -102,7 +102,7 @@ namespace Thrift.Transport
         public override void Flush()
         {
             byte[] buf;
-#if NETSTANDARD1_5
+#if NETSTANDARD1_4 || NETSTANDARD1_5
             ArraySegment<byte> arraySegment;
             buf = writeBuffer.TryGetBuffer(out arraySegment) ? arraySegment.Array : writeBuffer.ToArray();
 #else

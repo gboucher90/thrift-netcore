@@ -16,7 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 using System;
 using System.Net.Security;
 using System.Net.Sockets;
@@ -70,7 +69,7 @@ namespace Thrift.Transport
         /// <param name="port">The port where the server runs.</param>
         /// <param name="certificate">The certificate object.</param>
         public TTLSServerSocket(int port, X509Certificate2 certificate)
-            : this(port,  0, certificate)
+            : this(port, 0, certificate)
         {
         }
 
@@ -109,6 +108,12 @@ namespace Thrift.Transport
 
             this.port = port;
             this.serverCertificate = certificate;
+#if NETSTANDARD1_4
+            if (useBufferedSockets)
+            {
+                throw new NotSupportedException("Not supported with NetStandard 1.4, use NetStandard 1.5 instead.");
+            }
+#endif
             this.useBufferedSockets = useBufferedSockets;
             this.clientCertValidator = clientCertValidator;
             this.localCertificateSelectionCallback = localCertificateSelectionCallback;
@@ -159,7 +164,7 @@ namespace Thrift.Transport
 
             try
             {
-#if NETSTANDARD1_5
+#if NETSTANDARD1_4 || NETSTANDARD1_5
                 TcpClient client = this.server.AcceptTcpClientAsync().Result;
 #else
                 TcpClient client = this.server.AcceptTcpClient();
@@ -179,8 +184,12 @@ namespace Thrift.Transport
 
                 if (useBufferedSockets)
                 {
+#if NETSTANDARD1_4
+                    throw new NotImplementedException("Not supported with NetStandard 1.4, use NetStandard 1.5 instead.");
+#else
                     TBufferedTransport trans = new TBufferedTransport(socket);
                     return trans;
+#endif
                 }
                 else
                 {

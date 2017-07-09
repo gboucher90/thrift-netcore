@@ -19,7 +19,7 @@
  *
  */
 
-#if !NETSTANDARD1_5
+#if !(NETSTANDARD1_4 || NETSTANDARD1_5)
 using System.Web;
 using System.Net;
 #endif
@@ -29,7 +29,7 @@ using Thrift.Protocol;
 
 namespace Thrift.Transport
 {
-#if NETSTANDARD1_5
+#if NETSTANDARD1_4 || NETSTANDARD1_5
     public class THttpHandler
 #else
     public class THttpHandler : IHttpHandler
@@ -61,7 +61,7 @@ namespace Thrift.Transport
             this.inputProtocolFactory = inputProtocolFactory;
             this.outputProtocolFactory = outputProtocolFactory;
         }
-#if !NETSTANDARD1_5
+#if !(NETSTANDARD1_4 || NETSTANDARD1_5)
         public void ProcessRequest(HttpListenerContext context)
         {
             context.Response.ContentType = contentType;

@@ -245,7 +245,7 @@ namespace Thrift.Server
     {
       stop = true;
       serverTransport.Close();
-#if !NETSTANDARD1_5
+#if !(NETSTANDARD1_4 || NETSTANDARD1_5)
       //clean up all the threads myself
       workerThread.Abort();
       foreach (Thread t in clientThreads)

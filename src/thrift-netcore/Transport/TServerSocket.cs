@@ -70,7 +70,7 @@ namespace Thrift.Transport
          * Creates just a port listening server socket
          */
         public TServerSocket(int port)
-            : this(port, 0)
+            :this(port, 0)
         {
         }
 
@@ -78,7 +78,7 @@ namespace Thrift.Transport
          * Creates just a port listening server socket
          */
         public TServerSocket(int port, int clientTimeout)
-            :this(port, clientTimeout, false)
+            : this(port, clientTimeout, false)
         {
         }
 
@@ -86,6 +86,12 @@ namespace Thrift.Transport
         {
             this.port = port;
             this.clientTimeout = clientTimeout;
+#if NETSTANDARD1_4
+            if (useBufferedSockets)
+            {
+                throw new NotSupportedException("Not supported with NetStandard 1.4, use NetStandard 1.5 instead.");
+            }
+#endif
             this.useBufferedSockets = useBufferedSockets;
             try
             {
@@ -125,7 +131,7 @@ namespace Thrift.Transport
             try
             {
                 TSocket result2 = null;
-#if NETSTANDARD1_5
+#if NETSTANDARD1_4 || NETSTANDARD1_5
                 TcpClient result = server.AcceptTcpClientAsync().Result;
 #else
                 TcpClient result = server.AcceptTcpClient();
@@ -136,8 +142,12 @@ namespace Thrift.Transport
                     result2.Timeout = clientTimeout;
                     if (useBufferedSockets)
                     {
+#if NETSTANDARD1_4
+                        throw new NotSupportedException("Not supported with NetStandard 1.4, use NetStandard 1.5 instead.");
+#else
                         TBufferedTransport result3 = new TBufferedTransport(result2);
                         return result3;
+#endif
                     }
                     else
                     {
