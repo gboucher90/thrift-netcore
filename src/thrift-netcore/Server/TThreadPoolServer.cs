@@ -20,7 +20,6 @@
  * Please see doc/old-thrift-license.txt in the Thrift distribution for
  * details.
  */
-#if !(NETSTANDARD1_4 || NETSTANDARD1_5)
 using System;
 using System.Threading;
 using Thrift.Protocol;
@@ -210,4 +209,3 @@ namespace Thrift.Server
     }
   }
 }
-#endif

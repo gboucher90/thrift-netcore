@@ -27,7 +27,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("C# bindings for the Apache Thrift RPC system")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("The Apache Software Foundation")]
-[assembly: AssemblyProduct("Thrift")]
+[assembly: AssemblyProduct("Apache Thrift")]
 [assembly: AssemblyCopyright("The Apache Software Foundation")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
