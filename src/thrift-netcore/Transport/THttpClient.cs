@@ -164,13 +164,13 @@ namespace Thrift.Transport
 
                 byte[] data = _outputStream.ToArray();
 
-#if NET_CORE
+#if NETSTANDARD1_5
                 connection.Headers[HttpRequestHeader.ContentLength] = data.Length.ToString();
 #else
                 connection.ContentLength = data.Length;
 #endif
 
-#if NET_CORE
+#if NETSTANDARD1_5
                 using (Stream requestStream = connection.GetRequestStreamAsync().Result)
 #else
                 using (Stream requestStream = connection.GetRequestStream())
@@ -181,7 +181,7 @@ namespace Thrift.Transport
                     // Resolve HTTP hang that can happens after successive calls by making sure
                     // that we release the response and response stream. To support this, we copy
                     // the response to a memory stream.
-#if NET_CORE
+#if NETSTANDARD1_5
                     using (var response = connection.GetResponseAsync().Result)
 #else
                     using (var response = connection.GetResponse())
@@ -218,7 +218,7 @@ namespace Thrift.Transport
             HttpWebRequest connection = (HttpWebRequest)WebRequest.Create(_uri);
 
 
-#if !NET_CORE
+#if !NETSTANDARD1_5
             connection.ClientCertificates.AddRange(_certificates);
 
             if (_connectTimeout > 0)
@@ -233,20 +233,20 @@ namespace Thrift.Transport
             // Make the request
             connection.ContentType = "application/x-thrift";
             connection.Accept = "application/x-thrift";
-#if NET_CORE
+#if NETSTANDARD1_5
             connection.Headers[HttpRequestHeader.UserAgent] = "C#/THttpClient";
 #else
             connection.UserAgent = "C#/THttpClient";
 #endif
             connection.Method = "POST";
-#if !NET_CORE
+#if !NETSTANDARD1_5
             connection.ProtocolVersion = HttpVersion.Version10;
 #endif
 
             //add custom headers here
             foreach (KeyValuePair<string, string> item in _customHeaders)
             {
-#if !NET_CORE
+#if !NETSTANDARD1_5
                 connection.Headers.Add(item.Key, item.Value);
 #else
                 connection.Headers[item.Key] = item.Value;
@@ -294,7 +294,7 @@ namespace Thrift.Transport
                 {
                     var waitHandle = flushAsyncResult.AsyncWaitHandle;
                     waitHandle.WaitOne();  // blocking INFINITEly
-#if NET_CORE
+#if NETSTANDARD1_5
                     waitHandle.Dispose();
 #else
                     waitHandle.Close();

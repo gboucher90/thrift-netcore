@@ -23,7 +23,7 @@
 
 using System;
 using System.IO.Pipes;
-#if !NET_CORE
+#if !NETSTANDARD1_5
 using System.Threading;
 #endif
 
@@ -102,7 +102,7 @@ namespace Thrift.Transport
             {
                 EnsurePipeInstance();
 
-#if !NET_CORE
+#if !NETSTANDARD1_5
                 if (asyncMode)
                 {
                     var evt = new ManualResetEvent(false);
@@ -188,7 +188,7 @@ namespace Thrift.Transport
                 {
                     throw new TTransportException(TTransportException.ExceptionType.NotOpen);
                 }
-#if !NET_CORE
+#if !NETSTANDARD1_5
                 if (asyncMode)
                 {
                     Exception eOuter = null;
@@ -237,7 +237,7 @@ namespace Thrift.Transport
                     throw new TTransportException(TTransportException.ExceptionType.NotOpen);
                 }
 
-#if !NET_CORE
+#if !NETSTANDARD1_5
                 if (asyncMode)
                 {
                     Exception eOuter = null;

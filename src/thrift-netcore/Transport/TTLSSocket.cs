@@ -274,7 +274,7 @@ namespace Thrift.Transport
             {
                 InitSocket();
             }
-#if NET_CORE
+#if NETSTANDARD1_5
             client.ConnectAsync(host, port).Wait();
 #else
             client.Connect(host, port);
@@ -313,7 +313,7 @@ namespace Thrift.Transport
                 if (isServer)
                 {
                     // Server authentication
-#if NET_CORE
+#if NETSTANDARD1_5
                     this.secureStream.AuthenticateAsServerAsync(this.certificate, this.certValidator != null, SslProtocols.Tls, true).Wait();
 #else
                     this.secureStream.AuthenticateAsServer(this.certificate, this.certValidator != null, SslProtocols.Tls, true);
@@ -322,7 +322,7 @@ namespace Thrift.Transport
                 else
                 {
                     // Client authentication
-#if NET_CORE
+#if NETSTANDARD1_5
                     this.secureStream.AuthenticateAsClientAsync(host, new X509CertificateCollection { certificate }, SslProtocols.Tls, true).Wait();
 #else
                     this.secureStream.AuthenticateAsClient(host, new X509CertificateCollection { certificate }, SslProtocols.Tls, true);
@@ -347,7 +347,7 @@ namespace Thrift.Transport
             base.Close();
             if (this.client != null)
             {
-#if NET_CORE
+#if NETSTANDARD1_5
                 this.client.Dispose();
 #else
                 this.client.Close();

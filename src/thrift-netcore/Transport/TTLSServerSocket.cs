@@ -159,7 +159,7 @@ namespace Thrift.Transport
 
             try
             {
-#if NET_CORE
+#if NETSTANDARD1_5
                 TcpClient client = this.server.AcceptTcpClientAsync().Result;
 #else
                 TcpClient client = this.server.AcceptTcpClient();

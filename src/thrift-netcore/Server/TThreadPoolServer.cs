@@ -20,7 +20,7 @@
  * Please see doc/old-thrift-license.txt in the Thrift distribution for
  * details.
  */
-#if !NET_CORE
+#if !NETSTANDARD1_5
 using System;
 using System.Threading;
 using Thrift.Protocol;

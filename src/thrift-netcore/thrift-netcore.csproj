@@ -21,10 +21,6 @@
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
   </ItemGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.5' ">
-    <DefineConstants>$(DefineConstants);NET_CORE</DefineConstants>
-  </PropertyGroup>
-
   <ItemGroup Condition=" '$(TargetFramework)' == 'net35' ">
     <Reference Include="System.Web" />
     <Reference Include="System" />

@@ -21,7 +21,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-#if NET_CORE
+#if NETSTANDARD1_5
 using System.Runtime.Serialization;
 #else
 using System;
@@ -29,7 +29,7 @@ using System;
 
 namespace Thrift.Collections
 {
-#if NET_CORE
+#if NETSTANDARD1_5
     [DataContract]
 #else
     [Serializable]
@@ -37,7 +37,7 @@ namespace Thrift.Collections
     public class THashSet<T> : ICollection<T>
     {
 
-#if NET_CORE
+#if NETSTANDARD1_5
         [DataMember]
 #endif
         readonly HashSet<T> set = new HashSet<T>();

@@ -125,7 +125,7 @@ namespace Thrift.Transport
             try
             {
                 TSocket result2 = null;
-#if NET_CORE
+#if NETSTANDARD1_5
                 TcpClient result = server.AcceptTcpClientAsync().Result;
 #else
                 TcpClient result = server.AcceptTcpClient();

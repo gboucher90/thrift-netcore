@@ -22,8 +22,4 @@
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
   </ItemGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp1.1' ">
-    <DefineConstants>$(DefineConstants);NET_CORE</DefineConstants>
-  </PropertyGroup>
-
 </Project>

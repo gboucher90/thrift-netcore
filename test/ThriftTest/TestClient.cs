@@ -19,7 +19,7 @@
 
 using System;
 using System.Collections.Generic;
-#if NET_CORE
+#if NETCOREAPP1_1
 using System.Reflection;
 #endif
 using System.Threading;
@@ -140,7 +140,7 @@ namespace Test
 
                         //ensure proper open/close of transport
                         trans.Open();
-#if !NET_CORE
+#if !NETCOREAPP1_1
                         trans.Close();
 #endif
                         t.Start(trans);
@@ -288,7 +288,7 @@ namespace Test
             }
 
             // binary equals? only with hashcode option enabled ...
-#if NET_CORE
+#if NETCOREAPP1_1
             if( typeof(CrazyNesting).GetTypeInfo().GetMethod("Equals").DeclaringType == typeof(CrazyNesting))
 #else
             if (typeof(CrazyNesting).GetMethod("Equals").DeclaringType == typeof(CrazyNesting))
