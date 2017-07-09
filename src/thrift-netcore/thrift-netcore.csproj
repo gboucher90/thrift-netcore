@@ -42,4 +42,11 @@
     <Reference Include="System" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="thrift-0.9.3.exe">
+      <Pack>true</Pack>
+      <PackagePath>tools</PackagePath>
+    </Content>
+  </ItemGroup>
+
 </Project>
