@@ -29,10 +29,6 @@
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.4' Or '$(TargetFramework)' == 'netstandard1.5'">
-    <Compile Remove="Server/TThreadPoolServer.cs" />
-  </ItemGroup>
-
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.4' ">
     <Compile Remove="Transport/TBufferedTransport.cs" />
   </ItemGroup>
@@ -43,10 +39,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Server\TThreadPoolServer_V20.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="thrift-0.9.3.exe">
       <Pack>true</Pack>
       <PackagePath>tools</PackagePath>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
   </ItemGroup>
 
 </Project>

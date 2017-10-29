@@ -275,7 +275,7 @@ namespace Thrift.Transport
                 InitSocket();
             }
 #if NETSTANDARD1_4 || NETSTANDARD1_5
-            client.ConnectAsync(host, port).Wait();
+            client.ClientConnectAsync(host, port).Wait();
 #else
             client.Connect(host, port);
 #endif

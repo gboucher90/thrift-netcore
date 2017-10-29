@@ -22,6 +22,7 @@
  */
 
 using System;
+using System.Net;
 using System.Net.Sockets;
 #if NETSTANDARD1_4 || NETSTANDARD1_5
 using System.Threading.Tasks;
@@ -134,11 +135,12 @@ namespace Thrift.Transport
             {
                 InitSocket();
             }
-
-            if( timeout == 0)            // no timeout -> infinite
+            
+            if (timeout == 0)            // no timeout -> infinite
             {
 #if NETSTANDARD1_4 || NETSTANDARD1_5
-                client.ConnectAsync(host, port).Wait();
+                //client.ConnectAsync(host, port).Wait(); // it will fail in linux with net core 1.x, anthonywanted
+                client.ClientConnectAsync(host, port).Wait();
 #else
                 client.Connect(host, port);
 #endif
@@ -146,8 +148,8 @@ namespace Thrift.Transport
             else                        // we have a timeout -> use it
             {
 #if NETSTANDARD1_4 || NETSTANDARD1_5
-
-                var connectTask = client.ConnectAsync(host, port);
+                //var connectTask = client.ConnectAsync(host, port); // it will fail in linux with net core 1.x, anthonywanted
+                var connectTask = client.ClientConnectAsync(host, port);
                 if (connectTask != Task.WhenAny(connectTask, Task.Delay(timeout)).Result || !client.Connected)
                     throw new TTransportException(TTransportException.ExceptionType.TimedOut, "Connect timed out");
 #else
@@ -239,23 +241,23 @@ namespace Thrift.Transport
         }
 #endif
 
-    #region " IDisposable Support "
-    private bool _IsDisposed;
+        #region " IDisposable Support "
+        private bool _IsDisposed;
 
-    // IDisposable
-    protected override void Dispose(bool disposing)
-    {
-      if (!_IsDisposed)
-      {
-        if (disposing)
+        // IDisposable
+        protected override void Dispose(bool disposing)
         {
-          if (client != null)
-            ((IDisposable)client).Dispose();
-          base.Dispose(disposing);
+            if (!_IsDisposed)
+            {
+                if (disposing)
+                {
+                    if (client != null)
+                        ((IDisposable)client).Dispose();
+                    base.Dispose(disposing);
+                }
+            }
+            _IsDisposed = true;
         }
-      }
-      _IsDisposed = true;
+        #endregion
     }
-    #endregion
-  }
 }
