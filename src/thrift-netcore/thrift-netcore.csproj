@@ -28,6 +28,14 @@
     <PackageReference Include="System.Net.Requests" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
   </ItemGroup>
+  
+  <ItemGroup Condition=" '$(TargetFramework)' != 'netstandard1.4' And '$(TargetFramework)' != 'netstandard1.5'">
+    <Compile Remove="Server/TThreadPoolServer_v1.x.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.4' Or '$(TargetFramework)' == 'netstandard1.5'">
+    <Compile Remove="Server/TThreadPoolServer.cs" />
+  </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.4' ">
     <Compile Remove="Transport/TBufferedTransport.cs" />
@@ -36,10 +44,6 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'net35' ">
     <Reference Include="System.Web" />
     <Reference Include="System" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Server\TThreadPoolServer_V20.cs" />
   </ItemGroup>
 
   <ItemGroup>
