@@ -66,7 +66,10 @@ namespace Thrift.Transport
         {
             client = new TcpClient();
             client.ReceiveTimeout = client.SendTimeout = timeout;
-            client.Client.NoDelay = true;
+            // In linux calling client.Client will cause ConnectAsync(string, int) throw the System.PlatformNotSupportedException.
+            // Once we access TcpClient.Client in linux, a wrong System.PlatformNotSupportedException will be thrown. It's a bug of System.Net.Sockets 
+            // So change to client.NoDelay instead of client.Client.NoDelay
+            client.NoDelay = true;
         }
 
         public int Timeout
@@ -139,8 +142,7 @@ namespace Thrift.Transport
             if (timeout == 0)            // no timeout -> infinite
             {
 #if NETSTANDARD1_4 || NETSTANDARD1_5
-                //client.ConnectAsync(host, port).Wait(); // it will fail in linux with net core 1.x, anthonywanted
-                client.ClientConnectAsync(host, port).Wait();
+                client.ConnectAsync(host, port).Wait();
 #else
                 client.Connect(host, port);
 #endif
@@ -148,8 +150,7 @@ namespace Thrift.Transport
             else                        // we have a timeout -> use it
             {
 #if NETSTANDARD1_4 || NETSTANDARD1_5
-                //var connectTask = client.ConnectAsync(host, port); // it will fail in linux with net core 1.x, anthonywanted
-                var connectTask = client.ClientConnectAsync(host, port);
+                var connectTask = client.ConnectAsync(host, port);
                 if (connectTask != Task.WhenAny(connectTask, Task.Delay(timeout)).Result || !client.Connected)
                     throw new TTransportException(TTransportException.ExceptionType.TimedOut, "Connect timed out");
 #else

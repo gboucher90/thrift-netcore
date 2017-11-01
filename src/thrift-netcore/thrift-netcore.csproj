@@ -27,7 +27,6 @@
     <PackageReference Include="System.IO.Pipes" Version="4.3.0" />
     <PackageReference Include="System.Net.Requests" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
   </ItemGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' != 'netstandard1.4' And '$(TargetFramework)' != 'netstandard1.5'">
