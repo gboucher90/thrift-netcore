@@ -174,7 +174,10 @@ namespace Thrift.Transport
         {
             this.client = new TcpClient();
             client.ReceiveTimeout = client.SendTimeout = timeout;
-            client.Client.NoDelay = true;
+            // In linux calling client.Client will cause ConnectAsync(string, int) throw the System.PlatformNotSupportedException.
+            // Once we access TcpClient.Client in linux, a wrong System.PlatformNotSupportedException will be thrown. It's a bug of System.Net.Sockets 
+            // So change to client.NoDelay instead of client.Client.NoDelay
+            client.NoDelay = true;
         }
 
         /// <summary>
@@ -275,7 +278,7 @@ namespace Thrift.Transport
                 InitSocket();
             }
 #if NETSTANDARD1_4 || NETSTANDARD1_5
-            client.ClientConnectAsync(host, port).Wait();
+            client.ConnectAsync(host, port).Wait();
 #else
             client.Connect(host, port);
 #endif
