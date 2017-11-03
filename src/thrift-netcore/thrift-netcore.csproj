@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard1.4;netstandard1.5</TargetFrameworks>
     <AssemblyName>apache-thrift-netcore</AssemblyName>
     <PackageId>apache-thrift-netcore</PackageId>
-    <PackageVersion>0.9.3</PackageVersion>
+    <PackageVersion>0.9.3.2</PackageVersion>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -13,7 +13,7 @@
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
-    <Version>0.9.3</Version>
+    <Version>0.9.3.2</Version>
     <PackageLicenseUrl>https://github.com/apache/thrift/blob/0.9.3/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/apache/thrift/releases/tag/0.9.3</PackageProjectUrl>
     <Authors>The Apache Software Foundation</Authors>
